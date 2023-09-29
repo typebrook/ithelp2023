@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8' />
+  <title>Maplibre GL Inspect</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js'></script>
+  <link href='https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css' rel='stylesheet' />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id='map'></div>
+  <script>
+    var map = new maplibregl.Map({
+      container: 'map', // container id
+      center: [121, 24],
+      zoom: 14,
+      hash: true
+    });
+
+
+    let style = {
+      "version": 8,
+      "name": "peak",
+      "center": [121, 24],
+      "zoom": 14,
+      "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+      "sources": {
+        "peak": {
+          "type": "vector",
+          "tiles": [
+            "http://localhost:8000/output/{z}/{x}/{y}.pbf"
+          ],
+          "minzoom": 10,
+          "maxzoom": 14
+        },
+        "osm": {
+          "type": "raster",
+          "tiles": [
+            "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          ],
+          "minzoom": 0,
+          "maxzoom": 17
+        }
+      },
+      "layers": [
+        {
+          "id": "osm",
+          "type": "raster",
+          "source": "osm",
+        },
+        {
+          "id": "peak",
+          "type": "circle",
+          "source": "peak",
+          "source-layer": "peak",
+          "paint": {
+            "circle-color": "red",
+            "circle-stroke-width": 2,
+            "circle-stroke-color": "white"
+          }
+        },
+        {
+          "id": "peak_name",
+          "type": "symbol",
+          "source": "peak",
+          "source-layer": "peak",
+          "layout": {
+            // "text-anchor": "bottom",
+            "text-field": [
+              "case",
+              ["has", "ele"],
+              ["concat", ["get", "name"], "\n", ["get", "ele"], "m"],
+              ["get", "name"]
+            ],
+            // "text-font": ["Noto Sans Italic"],
+            "text-offset": [0, -1],
+            // "text-size": 12,
+            // "visibility": "visible",
+            // "text-max-width": 8,
+            // "text-line-height": 1.3,
+            // "symbol-sort-key": ["-", ["-", ["get", "ele"]], ["match", ["get", "natural"], "peak", 10000, 0]],
+            "text-padding": 50
+          }
+        }
+      ]
+    }
+    map.setStyle(style)
+
+
+    map.addControl(new maplibregl.NavigationControl());
+
+    // Show info when click on red point
+    var popup = new maplibregl.Popup({closeOnClick: false})
+    map.on('mousedown', e => {
+      var features = map.queryRenderedFeatures(e.point)
+      if (features.length > 0) {
+        popup.remove()
+        popup.addTo(map)
+        popup.setHTML(getFeatureHTML(features[0]))
+        popup.setLngLat(e.lngLat)
+      }
+    })
+
+    function getFeatureHTML(feature) {
+      var props = ['name']
+      Object.keys(feature.properties)
+        .sort()
+        .forEach(function (p) {
+          if (props.indexOf(p) === -1) props.push(p)
+        })
+      var info = '<div class="featureTable">'
+      props.forEach(function (p) {
+        if (feature.properties[p]) {
+          info += '<div class="featureRow"><div class="featureCell"><b>' + p + '</b></div>' +
+            '<div class="featureCell">' + feature.properties[p] + '</div></div>'
+        }
+      })
+      info += '</div>'
+      return info
+    }
+  </script>
+
+</body>
+
+</html>

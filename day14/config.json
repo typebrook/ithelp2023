@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "peak":    { "minzoom": 6, "maxzoom": 14 }
+  },
+  "settings": {
+    "minzoom": 2,
+    "maxzoom": 14,
+    "basezoom": 14,
+    "include_ids": false,
+    "name": "test",
+    "version": "0.1",
+    "description": "Tile schema for hiking",
+    "compress": "none"
+  }
+}
