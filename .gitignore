@@ -1,3 +1,4 @@
 output/
 tiles/
 *osm.pbf
+*mbtiles
