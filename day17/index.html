@@ -46,7 +46,7 @@
         "version": 8,
         "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
         "sources": {
-          "peak": {
+          "taiwan": {
             "type": "vector",
             "tiles": [
               "http://localhost:8000/output/{z}/{x}/{y}.pbf"
@@ -149,7 +149,7 @@
           {
             "id": "peak",
             "type": "circle",
-            "source": "peak",
+            "source": "taiwan",
             "source-layer": "peak",
             "filter": ["has", "survey_point"],
             "paint": {
@@ -167,7 +167,7 @@
           {
             "id": "peak_name",
             "type": "symbol",
-            "source": "peak",
+            "source": "taiwan",
             "source-layer": "peak",
             "layout": {
               "symbol-sort-key": ["get", "level"],
