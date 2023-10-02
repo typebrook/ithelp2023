@@ -40,9 +40,9 @@
     var map = new maplibregl.Map({
       container: "map",
       zoom: 14,
-      center: [121.3662395, 23.8584442],
+      center: [121, 24],
       hash: true,
-      "style": {
+      style: {
         "version": 8,
         "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
         "sources": {
@@ -51,7 +51,7 @@
             "tiles": [
               "http://localhost:8000/output/{z}/{x}/{y}.pbf"
             ],
-            "minzoom": 10,
+            "minzoom": 9,
             "maxzoom": 14
           },
           "osm": {
@@ -113,7 +113,7 @@
             "source-layer": "contours",
             "paint": {
               "line-color": "rgba(0,0,0, 50%)",
-              "line-width": ["match", ["get", "level"], 1, 1, 0.5],
+              "line-width": ["match", ["get", "level"], 1, 2, 0.5],
             },
             "layout": {
               "line-join": "round",
@@ -132,7 +132,7 @@
             "layout": {
               "symbol-placement": "line",
               "text-anchor": "center",
-              "text-size": 10,
+              "text-size": 14,
               "text-field": [
                 "concat",
                 ["number-format", ["get", "ele"], {}],
@@ -151,10 +151,17 @@
             "type": "circle",
             "source": "peak",
             "source-layer": "peak",
+            "filter": ["has", "survey_point"],
             "paint": {
-              "circle-color": "red",
+              "circle-color": [
+                "match", ["get", "survey_point"],
+                "trig_1st", "red",
+                "trig_2nd", "#edbfbb",
+                "trig_3rd", "#596dab",
+                "white"
+              ],
               "circle-stroke-width": 2,
-              "circle-stroke-color": "white"
+              "circle-stroke-color": "black"
             }
           },
           {
@@ -163,6 +170,7 @@
             "source": "peak",
             "source-layer": "peak",
             "layout": {
+              "symbol-sort-key": ["get", "level"],
               // "text-anchor": "bottom",
               "text-field": [
                 "case",
@@ -171,13 +179,18 @@
                 ["get", "name"]
               ],
               // "text-font": ["Noto Sans Italic"],
-              "text-offset": [0, -1],
-              // "text-size": 12,
+              "text-offset": [0, -1.6],
+              "text-max-width": 15,
+              "text-size": 18,
               // "visibility": "visible",
               // "text-max-width": 8,
               // "text-line-height": 1.3,
               // "symbol-sort-key": ["-", ["-", ["get", "ele"]], ["match", ["get", "natural"], "peak", 10000, 0]],
-              "text-padding": 50
+              "text-padding": 20
+            },
+            "paint": {
+              "text-halo-color": "white",
+              "text-halo-width": 1.5
             }
           }
         ],
@@ -187,6 +200,8 @@
         // }
       },
     });
+
+    map.showTileBoundaries = true;
 
     map.addControl(new maplibregl.NavigationControl());
     map.addControl(
@@ -198,7 +213,7 @@
 
     // Show info when click on red point
     var popup = new maplibregl.Popup({closeOnClick: false})
-    map.on('mousedown', e => {
+    map.on('contextmenu', e => {
       var features = map.queryRenderedFeatures(e.point)
       if (features.length > 0) {
         popup.remove()
