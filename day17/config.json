@@ -1,6 +1,6 @@
 {
   "layers": {
-    "peak":    { "minzoom": 9, "maxzoom": 14 }
+    "peak":    { "minzoom": 7, "maxzoom": 14 }
   },
   "settings": {
     "minzoom": 2,

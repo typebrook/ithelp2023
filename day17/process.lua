@@ -34,7 +34,11 @@ function node_function(node)
         if ref:find("^百岳") ~= nil then
           local rank = string.match (ref, "%d+")
           SetLevelAttribute(node, 0 + rank)
-          node:MinZoom(9)
+          if tonumber(rank) < 20 then
+            node:MinZoom(7)
+          else
+            node:MinZoom(8)
+          end
         elseif ref:find("^小百岳") then
           local rank = string.match (ref, "%d+")
           SetLevelAttribute(node, 100 + rank)
@@ -58,8 +62,11 @@ function node_function(node)
       elseif survey_point == "trig_2nd" then
         SetLevelAttribute(node, 2000)
         node:MinZoom(11)
-      else
+      elseif survey_point == "trig_3rd" then
         SetLevelAttribute(node, 3000)
+        node:MinZoom(12)
+      else
+        SetLevelAttribute(node, 4000)
         node:MinZoom(12)
       end
     end
