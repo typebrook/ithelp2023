@@ -14,10 +14,12 @@ end
 -- Assign nodes to a layer, and set attributes, based on OSM tags
 
 function node_function(node)
+
+  -- For layer peak
   local natural = node:Find("natural")
   local survey_point = node:Find("survey_point")
+
   if natural == "peak" or natural == "volcano" or survey_point ~= "" then
-  -- if survey_point ~= "" then
     node:Layer("peak", false)
     if node:Holds("natural") then
       node:Attribute("natural", natural)
