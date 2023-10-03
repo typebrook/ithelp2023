@@ -1,0 +1,29 @@
+{
+  "layers": {
+    "peak": {
+      "minzoom": 7,
+      "maxzoom": 14
+    },
+    "water": {
+      "minzoom": 6,
+      "maxzoom": 14,
+      "simplify_below": 12,
+      "simplify_level": 0.0003,
+      "simplify_ratio": 2
+    },
+    "water_name": {
+      "minzoom": 14,
+      "maxzoom": 14
+    }
+  },
+  "settings": {
+    "minzoom": 2,
+    "maxzoom": 14,
+    "basezoom": 14,
+    "include_ids": false,
+    "name": "test",
+    "version": "0.1",
+    "description": "Tile schema for hiking",
+    "compress": "none"
+  }
+}
