@@ -110,6 +110,20 @@ function node_function(node)
 	local rank, class, subclass = GetPOIRank(node)
 	if rank then WritePOI(node,class,subclass,rank) end
 
+  -- Write 'tourism'
+	local tourism = node:Find("tourism")
+	if tourismKeys[tourism] then
+		node:Layer("poi_hike", false)
+		SetNameAttributes(node)
+			node:Attribute("tourism", tourism)
+			local information = node:Find("information")
+			local operator = node:Find("internet_access:operator")
+		if information == "mobile" and operation ~= "" then
+			node:Attribute("information", information)
+			node:Attribute("internet_access:operator", operator)
+		end
+	end
+
 	-- Write 'mountain_peak' and 'water_name'
 	local natural = node:Find("natural")
 	if natural == "peak" or natural == "volcano" then
@@ -163,11 +177,11 @@ poiTags         = { aerialway = Set { "station" },
 					railway = Set { "halt", "station", "subway_entrance", "train_station_entrance", "tram_stop" },
 					shop = Set { "accessories", "alcohol", "antiques", "art", "bag", "bakery", "beauty", "bed", "beverages", "bicycle", "books", "boutique", "butcher", "camera", "car", "car_repair", "carpet", "charity", "chemist", "chocolate", "clothes", "coffee", "computer", "confectionery", "convenience", "copyshop", "cosmetics", "deli", "delicatessen", "department_store", "doityourself", "dry_cleaning", "electronics", "erotic", "fabric", "florist", "frozen_food", "furniture", "garden_centre", "general", "gift", "greengrocer", "hairdresser", "hardware", "hearing_aids", "hifi", "ice_cream", "interior_decoration", "jewelry", "kiosk", "lamps", "laundry", "mall", "massage", "mobile_phone", "motorcycle", "music", "musical_instrument", "newsagent", "optician", "outdoor", "perfume", "perfumery", "pet", "photo", "second_hand", "shoes", "sports", "stationery", "supermarket", "tailor", "tattoo", "ticket", "tobacco", "toys", "travel_agency", "video", "video_games", "watches", "weapons", "wholesale", "wine" },
 					sport = Set { "american_football", "archery", "athletics", "australian_football", "badminton", "baseball", "basketball", "beachvolleyball", "billiards", "bmx", "boules", "bowls", "boxing", "canadian_football", "canoe", "chess", "climbing", "climbing_adventure", "cricket", "cricket_nets", "croquet", "curling", "cycling", "disc_golf", "diving", "dog_racing", "equestrian", "fatsal", "field_hockey", "free_flying", "gaelic_games", "golf", "gymnastics", "handball", "hockey", "horse_racing", "horseshoes", "ice_hockey", "ice_stock", "judo", "karting", "korfball", "long_jump", "model_aerodrome", "motocross", "motor", "multi", "netball", "orienteering", "paddle_tennis", "paintball", "paragliding", "pelota", "racquet", "rc_car", "rowing", "rugby", "rugby_league", "rugby_union", "running", "sailing", "scuba_diving", "shooting", "shooting_range", "skateboard", "skating", "skiing", "soccer", "surfing", "swimming", "table_soccer", "table_tennis", "team_handball", "tennis", "toboggan", "volleyball", "water_ski", "yoga" },
-					tourism = Set { "alpine_hut", "aquarium", "artwork", "attraction", "bed_and_breakfast", "camp_site", "caravan_site", "chalet", "gallery", "guest_house", "hostel", "hotel", "information", "motel", "museum", "picnic_site", "theme_park", "viewpoint", "zoo" },
 					waterway = Set { "dock" } }
 
 -- POI "class" values: based on https://github.com/openmaptiles/openmaptiles/blob/master/layers/poi/poi.yaml
-poiClasses      = { townhall="town_hall", public_building="town_hall", courthouse="town_hall", community_centre="town_hall",
+poiClasses      = {
+					townhall="town_hall", public_building="town_hall", courthouse="town_hall", community_centre="town_hall",
 					golf="golf", golf_course="golf", miniature_golf="golf",
 					fast_food="fast_food", food_court="fast_food",
 					park="park", bbq="park",
@@ -201,6 +215,7 @@ poiClassRanks   = { hospital=1, railway=2, bus=3, attraction=4, harbor=5, colleg
 					school=7, stadium=8, zoo=9, town_hall=10, campsite=11, cemetery=12,
 					park=13, library=14, police=15, post=16, golf=17, shop=18, grocery=19,
 					fast_food=20, clothing_store=21, bar=22 }
+tourismKeys     = Set { "alpine_hut", "attraction", "camp_site", "caravan_site", "chalet", "guest_house", "information", "picnic_site", "viewpoint" }
 waterClasses    = Set { "river", "riverbank", "stream", "canal", "drain", "ditch", "dock" }
 waterwayClasses = Set { "stream", "river", "canal", "drain", "ditch" }
 
@@ -577,11 +592,26 @@ end
 function WritePOI(obj,class,subclass,rank)
 	local layer = "poi"
 	if rank>4 then layer="poi_detail" end
+
+	-- Hikining for Taiwan
+	-- if class == "information" and subclass == "tourism" then layer="poi_hike" end
+	--
+
 	obj:LayerAsCentroid(layer)
 	SetNameAttributes(obj)
 	obj:AttributeNumeric("rank", rank)
 	obj:Attribute("class", class)
 	obj:Attribute("subclass", subclass)
+
+	-- Hiking for Taiwan
+	if layer == "poi_hike" then
+		local information = obj:Find("information")
+		local operator = obj:Find("internet_access:operator")
+		if information == "mobile" then
+			obj:Attribute("information", information)
+			obj:Attribute("internet_access:operator", operator)
+		end
+	end
 end
 
 -- Set name attributes on any object

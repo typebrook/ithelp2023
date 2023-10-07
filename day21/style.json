@@ -556,7 +556,6 @@
       "source": "openmaptiles",
       "source-layer": "poi",
       "minzoom": 14,
-      "filter": ["all", ["==", "$type", "Point"], ["==", "rank", 1]],
       "layout": {
         "icon-size": 1,
         "text-anchor": "top",
@@ -572,6 +571,22 @@
         "text-halo-blur": 1,
         "text-halo-color": "rgba(255,255,255,0.75)",
         "text-halo-width": 1
+      }
+    },
+    {
+      "id": "mobile_label",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "poi_hike",
+      "minzoom": 13,
+      "filter": ["==", "information", "mobile"],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "通訊點",
+        "text-max-width": 8,
+        "text-offset": [0, 0.5],
+        "text-size": 18,
+        "visibility": "visible"
       }
     },
     {

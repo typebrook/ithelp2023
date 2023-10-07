@@ -5,6 +5,7 @@
 
 		"poi":              { "minzoom": 12, "maxzoom": 14 },
 		"poi_detail":       { "minzoom": 14, "maxzoom": 14, "write_to": "poi"},
+		"poi_hike":         { "minzoom": 13, "maxzoom": 14},
 
 		"housenumber":      { "minzoom": 14, "maxzoom": 14 },
 
@@ -37,6 +38,7 @@
 		"minzoom": 0,
 		"maxzoom": 14,
 		"basezoom": 14,
+		"bounding_box": [121.6008096, 24.7482295, 121.6239189, 24.7677674],
 		"include_ids": false,
 		"combine_below": 14,
 		"name": "Tilemaker to OpenMapTiles schema",
@@ -48,7 +50,7 @@
 			"scheme": "xyz", 
 			"type": "baselayer", 
 			"format": "pbf", 
-            "tiles": ["https://example.com/liechtenstein/{z}/{x}/{y}.pbf"]
+                "tiles": ["https://example.com/liechtenstein/{z}/{x}/{y}.pbf"]
 		}
 	}
 }

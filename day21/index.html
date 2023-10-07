@@ -8,6 +8,10 @@
   <script src="https://unpkg.com/maplibre-gl@3.0.1/dist/maplibre-gl.js"></script>
   <script src="https://unpkg.com/maplibre-contour@0.0.3/dist/index.min.js"></script>
   <link href="https://unpkg.com/maplibre-gl@3.0.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script
+    src='https://github.com/acalcutt/maplibre-gl-inspect/releases/download/v1.4.6/maplibre-gl-inspect.min.js'></script>
+  <link href='https://github.com/acalcutt/maplibre-gl-inspect/releases/download/v1.4.6/maplibre-gl-inspect.css'
+    rel='stylesheet' />
   <style>
     body {
       margin: 0;
@@ -37,6 +41,7 @@
     map.showTileBoundaries = true;
 
     map.addControl(new maplibregl.NavigationControl());
+    map.addControl(new MaplibreInspect());
 
     // Show info when click on red point
     var popup = new maplibregl.Popup({closeOnClick: false})
