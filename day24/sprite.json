@@ -1,0 +1,16 @@
+{
+  "skull": {
+    "height": 494,
+    "pixelRatio": 1,
+    "width": 512,
+    "x": 0,
+    "y": 0
+  },
+  "trig": {
+    "height": 435,
+    "pixelRatio": 0.2,
+    "width": 435,
+    "x": 512,
+    "y": 0
+  }
+}

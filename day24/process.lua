@@ -126,12 +126,14 @@ function node_function(node)
 
 	-- Write 'mountain_peak' and 'water_name'
 	local natural = node:Find("natural")
-	if natural == "peak" or natural == "volcano" then
+	local survey_point = node:Find("survey_point")
+	if natural == "peak" or natural == "volcano" or survey_point ~= "" then
 		node:Layer("mountain_peak", false)
 		SetEleAttributes(node)
 		node:AttributeNumeric("rank", 1)
 		node:Attribute("class", natural)
 		SetNameAttributes(node)
+		if survey_piont ~= "" then node:Attribute("survey_point", survey_point) end
 		return
 	end
 	if natural == "bay" then
