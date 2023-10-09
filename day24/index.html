@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Display a map</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://unpkg.com/maplibre-gl@3.0.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/maplibre-contour@0.0.3/dist/index.min.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@3.0.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script
+    src='https://github.com/acalcutt/maplibre-gl-inspect/releases/download/v1.4.6/maplibre-gl-inspect.min.js'></script>
+  <link href='https://github.com/acalcutt/maplibre-gl-inspect/releases/download/v1.4.6/maplibre-gl-inspect.css'
+    rel='stylesheet' />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script>
+    var map = new maplibregl.Map({
+      container: "map",
+      zoom: 14,
+      center: [121, 24],
+      hash: true,
+      style: './style.json',
+    });
+
+    map.showTileBoundaries = true;
+
+    map.addControl(new maplibregl.NavigationControl());
+    map.addControl(new MaplibreInspect());
+
+    // Show info when click on red point
+    var popup = new maplibregl.Popup({closeOnClick: false})
+    map.on('contextmenu', e => {
+      var features = map.queryRenderedFeatures(e.point)
+      if (features.length > 0) {
+        popup.remove()
+        popup.addTo(map)
+        popup.setHTML(getFeatureHTML(features[0]))
+        popup.setLngLat(e.lngLat)
+      }
+    })
+
+    function getFeatureHTML(feature) {
+      var props = ['name']
+      Object.keys(feature.properties)
+        .sort()
+        .forEach(function (p) {
+          if (props.indexOf(p) === -1) props.push(p)
+        })
+      var info = '<div class="featureTable">'
+      props.forEach(function (p) {
+        if (feature.properties[p]) {
+          info += '<div class="featureRow"><div class="featureCell"><b>' + p + '</b></div>' +
+            '<div class="featureCell">' + feature.properties[p] + '</div></div>'
+        }
+      })
+      info += '</div>'
+      return info
+    }
+  </script>
+</body>
+
+</html>
