@@ -1,0 +1,151 @@
+{
+  "version": 8,
+  "name": "contour-test",
+  "sources": {
+    "contours": {
+      "type": "vector",
+      "url": "https://typebrook.github.io/contours/tiles.json"
+    }
+  },
+  "sprite": "https://raw.githubusercontent.com/typebrook/mapstew/master/resources/rudymap",
+  "glyphs": "https://typebrook.github.io/mapstew/static/fonts/KlokanTech%20{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "minzoom": 0,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "background-color": "#FFFFFF"
+      }
+    },
+    {
+      "id": "contour_index",
+      "type": "line",
+      "source": "contours",
+      "source-layer": "contour",
+      "filter": [
+        "all",
+        [
+          ">",
+          "height",
+          0
+        ],
+        [
+          "in",
+          "nth_line",
+          10,
+          5
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#5F564C",
+        "line-opacity": {
+          "stops": [
+            [
+              7,
+              0.2
+            ],
+            [
+              10,
+              0.6
+            ]
+          ]
+        },
+        "line-width": 2.0
+      }
+    },
+    {
+      "id": "contour",
+      "type": "line",
+      "source": "contours",
+      "source-layer": "contour",
+      "filter": [
+        "all",
+        [
+          "!in",
+          "nth_line",
+          10,
+          5
+        ],
+        [
+          ">",
+          "height",
+          0
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#5F564C",
+        "line-opacity": 0.5,
+        "line-width": 1.2
+      }
+    },
+    {
+      "id": "contour_label",
+      "type": "symbol",
+      "metadata": {},
+      "source": "contours",
+      "source-layer": "contour",
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "in",
+          "nth_line",
+          10,
+          5
+        ],
+        [
+          ">",
+          "height",
+          0
+        ]
+      ],
+      "layout": {
+        "icon-image": "",
+        "symbol-avoid-edges": true,
+        "symbol-placement": "line",
+        "text-allow-overlap": false,
+        "text-field": "{height}",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-ignore-placement": false,
+        "text-padding": 10,
+        "text-rotation-alignment": "map",
+        "text-size": {
+          "base": 1,
+          "stops": [
+            [
+              15,
+              9.5
+            ],
+            [
+              20,
+              12
+            ]
+          ]
+        },
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-color": "rgba(103, 78, 47, 1)",
+        "text-halo-blur": 1,
+        "text-halo-color": "rgba(246, 239, 231, 1)",
+        "text-halo-width": 1
+      }
+    }
+  ]
+}
